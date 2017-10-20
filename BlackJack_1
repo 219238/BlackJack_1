@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main(){
+	srand(time(NULL));
+	const int MAX = 52;
+	char baraja [MAX];
+	int aux = 1;
+	int cartasIniciales = 2;
+	// formar la baraja principal
+	for (int i = 0; i < MAX;){
+		if(aux == 10){
+			for (int x = 0; x < 4; x++){
+				baraja[i] = 'J';
+				i++;		
+			}
+		}
+		else if(aux == 11){
+			for (int x = 0; x < 4; x++){
+				baraja[i] = 'K';
+				i++;		
+			}
+		}
+		else if(aux == 12){
+			for (int x = 0; x < 4; x++){
+				baraja[i] = 'Q';
+				i++;		
+			}
+		}
+		else if(aux == 13){
+			for (int x = 0; x < 4; x++){
+				baraja[i] = 'A';
+				i++;		
+			}
+		}
+		else{
+			for (int x = 0; x < 4; x++){
+				baraja[i] = aux + '0';
+				i++;		
+			}
+		}
+			aux++;
+	}
+	
+	//REBORUJAR BARAJA
+	aux = 0;
+	int auxiliar[MAX];//Auxiliar para que no se repita una misma carta
+	char barajaReborujado[MAX];
+	bool bandera1 = false;	
+	while (aux != MAX){
+		int numAleatoreo = rand() % 50;
+		for(int x = 0; auxiliar[x] != '\0'; x++)
+			if(auxiliar [x] == numAleatoreo)
+				bandera1 = true;
+		if(bandera1 == false){
+			barajaReborujado[aux] = baraja[numAleatoreo];
+			aux++;
+		}
+	
+	}
+	//TERCER CARTA
+	char eleccion;
+	printf("INGRESA S PARA ACEPTAR UNA TERCERA CARTA");
+	scanf("%c", eleccion);
+	int cartasEntregadas = 0,puntajeJugador = 0,puntajeComputadora = 0;	
+	if(eleccion == 's')
+		cartasIniciales = 3;
+	char primerJugador[cartasIniciales],computadora[2];
+	for(cartasEntregadas = 0; cartasEntregadas < cartasIniciales; cartasEntregadas++){
+		primerJugador[cartasEntregadas] = barajaReborujado[cartasEntregadas];
+		barajaReborujado[cartasEntregadas] = '0';
+		if (primerJugador[cartasEntregadas] == 'J' || primerJugador[cartasEntregadas] == 'K'
+			||primerJugador[cartasEntregadas] == 'Q')
+			puntajeJugador += 10;
+		else if(primerJugador[cartasEntregadas] == 'A'){
+			int valorAS;
+			while(valorAS != 1 && valorAS != 11){
+				printf("");
+			}
+			puntajeJugador += valorAS;
+		}	
+		else{
+			puntajeJugador += (primerJugador[cartasEntregadas] - '0');
+		}
+	}
+	
+	for(int i = 0; i < 2; i++){
+		computadora[i] = barajaReborujado[cartasEntregadas];
+		barajaReborujado[cartasEntregadas] = '0';
+		cartasEntregadas++;
+		if (computadora[i] == 'J' || computadora[i] == 'K'
+			|| computadora[i] == 'Q')
+			puntajeComputadora += 10;
+		else if(computadora[i] == 'A'){
+			puntajeComputadora += 11;
+		}	
+		else{
+			puntajeComputadora += (computadora[i] - '0');
+		}
+	}
+	printf("Puntaje de la computadora : %i",puntajeComputadora);
+	printf("Puntaje del jugador : %i",puntajeJugador);
+	printf("Cartas de la computadora [",computadora);
+	printf("Cartas del jugador [");
+	for(int i = 0; i < cartasEntregadas; i++)	
+		printf("%i",primerJugador[i]);
+		printf("[");
+		printf("Las cartas de la baraja :",barajaReborujado);	
+	if(puntajeComputadora <= 21 && puntajeJugador <= 21)
+	{
+		if(puntajeComputadora > puntajeJugador){
+			printf("GANO LA COMPUTADORA");
+		}
+		else if(puntajeComputadora == puntajeJugador){
+			printf("EMPATE");
+		}
+		else{
+			printf("GANO EL JUGADOR");
+		}
+	}
+	else if(puntajeComputadora <= 21 && puntajeJugador > 21){
+		printf("GANO LA COMPUTADORA");
+	}
+	else{
+		printf("GANO EL JUGADOR");
+	}
+	return 0;
+}
